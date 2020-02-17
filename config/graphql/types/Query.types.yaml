@@ -1,0 +1,8 @@
+Query:
+  type: object
+  config:
+    description: "Products ORM repository"
+    fields:
+      product:
+        type: "product"
+        resolve: '@=resolver("App\\GraphQL\\Resolvers\\ProductResolver")'

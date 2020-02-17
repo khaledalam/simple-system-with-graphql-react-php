@@ -2,6 +2,7 @@
     "devDependencies": {
         "@babel/preset-react": "^7.8.3",
         "@symfony/webpack-encore": "^0.28.2",
+        "axios": "^0.19.2",
         "core-js": "^3.0.0",
         "regenerator-runtime": "^0.13.2",
         "webpack-notifier": "^1.6.0"
@@ -15,8 +16,12 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@babel/plugin-proposal-class-properties": "^7.8.3",
+        "@babel/plugin-transform-runtime": "^7.8.3",
         "prop-types": "^15.7.2",
         "react": "^16.12.0",
-        "react-dom": "^16.12.0"
+        "react-dom": "^16.12.0",
+        "react-router-dom": "^5.1.2",
+        "react-toastify": "^5.5.0"
     }
 }
