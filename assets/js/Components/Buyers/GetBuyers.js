@@ -12,12 +12,9 @@ class GetBuyers extends Component {
     }
 
     getBuyers() {
-        axios.get(`/api/get/buyers`).then(buyers => {
-            console.log(buyers);
-            this.setState({ buyers: buyers.data, loading: false});
-        }).catch(error => {
-            console.log(error);
-        })
+        axios.get(`/api/get/buyers`)
+            .then(buyers => { this.setState({ buyers: buyers.data, loading: false});})
+            .catch(error => console.log(error));
     }
 
     handleChangeLimit(increase) {
@@ -44,29 +41,32 @@ class GetBuyers extends Component {
                                 <th scope="col">Name</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            {buyers.length > 0
+                                ? ( <tbody>
                                 { buyers.slice(0, lastCount).map( buyer =>
                                     <tr key={buyer.id}>
                                         <th scope="row">{buyer.id}</th>
                                         <td>{buyer.name}</td>
                                     </tr>
                                 )}
-                                <div className={'text-center'}>
-                                    {lastCount < buyers.length ?
-                                        (
-                                            <button className={'btn btn-sm btn-info'} onClick={this.handleChangeLimit.bind(this, true)}>Show More <span className={'fa fa-arrow-down fa-1x'}></span> </button>
-                                        )
-                                        : null
-                                    }
-                                    <span>&nbsp;</span>
-                                    {lastCount > 5 ?
-                                        (
-                                            <button className={'btn btn-sm btn-danger'} onClick={this.handleChangeLimit.bind(this, false)}>Show Less <span className={'fa fa-arrow-up fa-1x'}></span></button>
-                                        ) : null
-                                    }
-                                </div>
-                            </tbody>
+                            </tbody>)
+                            : (<tbody><tr><td>No Buyers!</td></tr></tbody>)}
+
                         </table>
+                        <div className={'text-center'}>
+                            {lastCount < buyers.length ?
+                                (
+                                    <button className={'btn btn-sm btn-info'} onClick={this.handleChangeLimit.bind(this, true)}>Show More <span className={'fa fa-arrow-down fa-1x'}></span> </button>
+                                )
+                                : null
+                            }
+                            <span>&nbsp;</span>
+                            {lastCount > 5 ?
+                                (
+                                    <button className={'btn btn-sm btn-danger'} onClick={this.handleChangeLimit.bind(this, false)}>Show Less <span className={'fa fa-arrow-up fa-1x'}></span></button>
+                                ) : null
+                            }
+                        </div>
                     </div>
                 )}
             </div>

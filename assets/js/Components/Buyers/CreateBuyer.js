@@ -25,7 +25,6 @@ class CreateBuyer extends Component {
     render() {
         return(
                 <div className="container">
-                    <ToastContainer position={toast.POSITION.TOP_CENTER}/>
                 <form>
                     <div className="form-group">
                         <label>Create Buyer</label>

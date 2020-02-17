@@ -4,8 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Buyer;
 use App\Entity\Order;
+use App\Entity\Orders;
 use App\Entity\Product;
-use App\Repository\BuyerRepository;
+use App\Utils;
 use Doctrine\ORM\Query;
 use Overblog\GraphQLBundle\Annotation\Description;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class APIController extends AbstractController
 {
@@ -50,7 +55,7 @@ class APIController extends AbstractController
         ->getQuery();
         $result = $query->getResult(Query::HYDRATE_ARRAY);
         if (!$result) {
-            throw $this->createNotFoundException('No products');
+            return new Response(json_encode([]));
         }
         return new Response(json_encode($result));
     }
@@ -88,7 +93,7 @@ class APIController extends AbstractController
         }
         $buyer = new Buyer();
         $buyer->setName($buyerName);
-        $buyer->setAuthToken($this->generateToken());
+        $buyer->setAuthToken((new Utils())->generateToken());
         $em->persist($buyer);
         $em->flush();
         return new Response('Saved new buyer: ' . $buyer->getName());
@@ -107,14 +112,9 @@ class APIController extends AbstractController
             ->getQuery();
         $result = $query->getResult(Query::HYDRATE_ARRAY);
         if (!$result) {
-            throw $this->createNotFoundException('No buyers');
+            return new Response(json_encode([]));
         }
         return new Response(json_encode($result));
-    }
-
-    private function generateToken() :string
-    {
-        return rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
     }
 
     /**
@@ -143,50 +143,78 @@ class APIController extends AbstractController
      */
     public function createOrder(Request $request, EntityManagerInterface $em) :Response
     {
-        $buyerId = $request->get('buyersId');
-        $productsIds = $request->get('productsIds');
+        $buyerId = $request->get('buyerID');
+        $productsIds = $request->get('productsIDs');
 
-        $buyer = $this->getDoctrine()
-            ->getRepository('App:Buyer')->findBy(['id' => $buyerId]);
-
-        $products = [];
-        foreach ($productsIds as $productId) {
-            $products[] = $this->getDoctrine()
-                ->getRepository('App:Product')->findBy(['id' => $buyerId]);
+        if(!$buyerId || !$productsIds) {
+            return new Response('Error empty inputs');
         }
 
-//        $order = new Order();
-//        $order->setBuyer($buyer);
-//        $order->set
-//
-//        if (!$this->isValidProductName($buyerName)) {
-//            return new Response('Error!');
-//        }
-//        $buyer = new Buyer();
-//        $buyer->setName($buyerName);
-//        $buyer->setName($this->generateToken());
-//        $em->persist($buyer);
-//        $em->flush();
-//        return new Response('Saved new buyer name: ' . $buyer->getName());
+        $buyer = $this->getDoctrine()->getRepository('App:Buyer')->find($buyerId);
+        if(!$buyer){
+            return new Response('No buyer found with id ' . $buyerId);
+        }
+
+        $order = new Orders();
+        $order->setBuyer($buyer);
+
+        foreach ($productsIds as $productId) {
+            $product = $this->getDoctrine()->getRepository('App:Product')->find($productId['id']);
+            if(!$product){
+                return new Response('No product found with id ' . $productId);
+            }
+            $order->addProduct($product);
+        }
+
+        $em->persist($order);
+        $em->flush();
+        return new Response('Saved new order id: ' . $order->getId());
     }
 
     /**
-     * @Route("/api/get/buyers", name="getBuyers", methods={"POST", "GET"})
+     * @Route("/api/get/orders", name="getOrders", methods={"POST", "GET"})
+     * @param Request $request
      * @return Response
      */
-//    public function getBuyers() :Response
-//    {
-//        $query = $this->getDoctrine()
-//            ->getRepository('App:Buyer')
-//            ->createQueryBuilder('buyer')
-//            ->addOrderBy('buyer.id', 'DESC')
-//            ->getQuery();
-//        $result = $query->getResult(Query::HYDRATE_ARRAY);
-//        if (!$result) {
-//            throw $this->createNotFoundException('No buyers');
-//        }
-//        return new Response(json_encode($result));
-//    }
+    public function getOrders(Request $request) :Response
+    {
+        $filterByBuyer = $request->get('filterByBuyer') ?? -1; // -1 means disable filter byBuyer
+
+        $query = $this->getDoctrine()
+            ->getRepository('App:Orders')
+            ->createQueryBuilder('orders')
+            ->addOrderBy('orders.id', 'DESC');
+
+        if($filterByBuyer !== -1){
+            $query->andWhere('orders.buyer = :buyerID')->setParameter('buyerID', $filterByBuyer);
+        }
+        $query = $query->getQuery();
+        $result = $query->getResult(Query::HYDRATE_ARRAY);
+
+        if (!$result) {
+            return new Response(json_encode([]));
+        }
+
+        $orders = [];
+        foreach ($result as $item) {
+            $order = $this->getDoctrine()->getRepository('App:Orders')->find($item);
+            $products = [];
+            foreach ($order->getProducts() as $product) {
+                $products[] = [
+                    'productName' => $product->getName(),
+                    'productID' => $product->getId(),
+                ];
+            }
+
+            $orders[] = [
+                'orderID' => $order->getId(),
+                'buyerID' => $order->getBuyer()->getId(),
+                'buyerName' => $order->getBuyer()->getName(),
+                'products' => $products,
+            ];
+        }
+        return new Response(json_encode($orders));
+    }
 
     // -------------------------------- END ORDERS --------------------------------
 }

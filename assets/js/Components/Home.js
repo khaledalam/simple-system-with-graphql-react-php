@@ -4,6 +4,9 @@ import CreateProduct from "./Products/CreateProduct";
 import GetProducts from "./Products/GetProducts";
 import GetBuyers from "./Buyers/GetBuyers";
 import CreateBuyer from "./Buyers/CreateBuyer";
+import CreateOrder from "./Orders/CreateOrder";
+import GetOrders from "./Orders/GetOrders";
+import {toast, ToastContainer} from "react-toastify";
 
 class Home extends Component {
 
@@ -26,22 +29,22 @@ class Home extends Component {
                                 <ul className="dropdown-menu" role="menu">
                                     <li><a href="#tabGetProducts" data-toggle="tab">All Products</a></li>
                                     <li><a href="#tabGetBuyers" data-toggle="tab">All Buyers</a></li>
-                                    <li><a href="#tabGetOrders" data-toggle="tab">All Orders</a></li>
+                                    <li><a href="#tabGetOrders" data-toggle="tab">Orders</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#tabGetOrdersByBuyer" data-toggle="tab">Retrieve orders made by a specific buyer</a></li>
                         </ul>
                     </div>
                     <div className="panel-body">
                         <div className="tab-content">
-                            <div className="tab-pane fade in active" id="tabCreateProduct">
+                            <ToastContainer position={toast.POSITION.TOP_CENTER} autoClose={1500}/>
+                            <div className="tab-pane fade" id="tabCreateProduct">
                                 <CreateProduct/>
                             </div>
                             <div className="tab-pane fade" id="tabCreateBuyer">
                                 <CreateBuyer/>
                             </div>
                             <div className="tab-pane fade" id="tabCreateOrder">
-
+                                <CreateOrder/>
                             </div>
                             <div className="tab-pane fade" id="tabGetProducts">
                                 <GetProducts/>
@@ -49,30 +52,13 @@ class Home extends Component {
                             <div className="tab-pane fade" id="tabGetBuyers">
                                 <GetBuyers/>
                             </div>
-                            <div className="tab-pane fade" id="tabGetOrders">Info 5</div>
-                            <div className="tab-pane fade" id="tabGetOrdersByBuyer">Info 5</div>
+                            <div className="tab-pane fade in active" id="tabGetOrders">
+                                <GetOrders/>
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-
-            // <div>
-            //     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            //         <Link className={"navbar-brand"} to={"/"}> Symfony React Project </Link>
-            //         <div className="collapse navbar-collapse" id="navbarText">
-            //             <ul className="navbar-nav mr-auto">
-            //                 <li className="nav-item">
-            //                     <Link className={"nav-link"} to={"/products"}> Products </Link>
-            //                 </li>
-            //             </ul>
-            //         </div>
-            //     </nav>
-            //     <Switch>
-            //         <Redirect exact from="/" to="/products" />
-            //         <Route path="/products" component={Products} />
-            //     </Switch>
-            // </div>
         )
     }
 }

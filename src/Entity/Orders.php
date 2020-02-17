@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\OrdersRepository")
  */
-class Order
+class Orders
 {
     /**
      * @ORM\Id()
@@ -20,18 +20,17 @@ class Order
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Buyer", inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $buyer;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="productOrder")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Product", inversedBy="orders")
      */
-    private $product;
+    private $products;
 
     public function __construct()
     {
-        $this->product = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -54,16 +53,15 @@ class Order
     /**
      * @return Collection|Product[]
      */
-    public function getProduct(): Collection
+    public function getProducts(): Collection
     {
-        return $this->product;
+        return $this->products;
     }
 
     public function addProduct(Product $product): self
     {
-        if (!$this->product->contains($product)) {
-            $this->product[] = $product;
-            $product->setProductOrder($this);
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
         }
 
         return $this;
@@ -71,12 +69,8 @@ class Order
 
     public function removeProduct(Product $product): self
     {
-        if ($this->product->contains($product)) {
-            $this->product->removeElement($product);
-            // set the owning side to null (unless already changed)
-            if ($product->getProductOrder() === $this) {
-                $product->setProductOrder(null);
-            }
+        if ($this->products->contains($product)) {
+            $this->products->removeElement($product);
         }
 
         return $this;

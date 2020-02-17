@@ -29,13 +29,14 @@ class Buyer
     private $authToken;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="buyer")
+     * @ORM\OneToMany(targetEntity="App\Entity\Orders", mappedBy="buyer")
      */
     private $orders;
 
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -68,14 +69,14 @@ class Buyer
     }
 
     /**
-     * @return Collection|Order[]
+     * @return Collection|Orders[]
      */
     public function getOrders(): Collection
     {
         return $this->orders;
     }
 
-    public function addOrder(Order $order): self
+    public function addOrder(Orders $order): self
     {
         if (!$this->orders->contains($order)) {
             $this->orders[] = $order;
@@ -85,7 +86,7 @@ class Buyer
         return $this;
     }
 
-    public function removeOrder(Order $order): self
+    public function removeOrder(Orders $order): self
     {
         if ($this->orders->contains($order)) {
             $this->orders->removeElement($order);
@@ -97,4 +98,6 @@ class Buyer
 
         return $this;
     }
+
+
 }

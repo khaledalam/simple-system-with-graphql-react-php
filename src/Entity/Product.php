@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,9 +24,16 @@ class Product
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="product")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Orders", mappedBy="products")
      */
-    private $productOrder;
+    private $orders;
+
+
+    public function __construct()
+    {
+        $this->orders = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -43,15 +52,36 @@ class Product
         return $this;
     }
 
-    public function getProductOrder(): ?Order
+    /**
+     * @return Collection|Orders[]
+     */
+    public function getOrders(): Collection
     {
-        return $this->productOrder;
+        return $this->orders;
     }
 
-    public function setProductOrder(?Order $productOrder): self
+    public function addOrder(Orders $order): self
     {
-        $this->productOrder = $productOrder;
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->addProduct($this);
+        }
 
         return $this;
     }
+
+    public function removeOrder(Orders $order): self
+    {
+        if ($this->orders->contains($order)) {
+            $this->orders->removeElement($order);
+            $order->removeProduct($this);
+        }
+
+        return $this;
+    }
+
+
+
+
+
 }

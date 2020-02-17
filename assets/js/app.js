@@ -8,12 +8,10 @@ class App extends React.Component {
         super();
 
         this.state = {
-            entries: []
         };
     }
 
     componentDidMount() {
-
     }
 
     render() {
