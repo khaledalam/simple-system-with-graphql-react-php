@@ -1,0 +1,4 @@
+PostConnection:
+  type: relay-connection
+  config:
+    nodeType: Post!

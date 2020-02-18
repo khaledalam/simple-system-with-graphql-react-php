@@ -1,0 +1,11 @@
+Buyer:
+  type: object
+  config:
+    resolveField: '@=resolver("App\\GraphQL\\Resolver\\BuyerResolver", [info, value, args])'
+    fields:
+      id:
+        type: Int
+      name:
+        type: String
+      authToken:
+        type: String

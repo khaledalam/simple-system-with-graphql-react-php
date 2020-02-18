@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Resolver;
 
-use App\Entity\Product;
+use App\Entity\Buyer;
 use Doctrine\ORM\EntityManagerInterface;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
-class ProductResolver implements ResolverInterface {
+class BuyerResolver implements ResolverInterface {
 
     /**
      * @var EntityManagerInterface
@@ -28,23 +28,28 @@ class ProductResolver implements ResolverInterface {
         return $this->$method($value, $args);
     }
 
-    public function resolve(int $id) :Product
+    public function resolve(int $id) :Buyer
     {
-        return $this->em->find(Product::class, $id);
+        return $this->em->find(Buyer::class, $id);
     }
 
-    public function allProduct() : array
+    public function allBuyers() : array
     {
-        return $this->em->getRepository(Product::class)->findAll();
+        return $this->em->getRepository(Buyer::class)->findAll();
     }
 
-    public function id(Product $product) :int
+    public function id(Buyer $buyer) :int
     {
-        return $product->getId();
+        return $buyer->getid();
     }
 
-    public function name(Product $product) :string
+    public function name(Buyer $buyer) :string
     {
-        return $product->getName();
+        return $buyer->getName();
+    }
+
+    public function authToken(Buyer $buyer) :string
+    {
+        return $buyer->getAuthToken();
     }
 }

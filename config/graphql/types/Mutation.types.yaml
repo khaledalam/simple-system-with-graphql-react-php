@@ -1,0 +1,24 @@
+Mutation:
+  type: object
+  config:
+    fields:
+      createProduct:
+        type: "Product"
+        args:
+          name:
+            type: "String!"
+        resolve: '@=mutation("App\\GraphQL\\Mutation\\Create::Product", [args["name"]])'
+      createBuyer:
+        type: "Buyer"
+        args:
+          name:
+            type: "String!"
+        resolve: '@=mutation("App\\GraphQL\\Mutation\\Create::Buyer", [args["name"]])'
+      createOrder:
+        type: "Orders"
+        args:
+          buyerID:
+            type: "String!"
+          productsIDs:
+            type: "[String!]!"
+        resolve: '@=mutation("App\\GraphQL\\Mutation\\Create::Order", [args["buyerID"], args["productsIDs"]])'

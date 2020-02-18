@@ -14,12 +14,8 @@ class GetOrders extends Component {
     }
 
     getOrders(byBuyer = -1) {
-        console.log(byBuyer);
-        axios.post(`/api/get/orders`, {
-            filterByBuyer: byBuyer
-        }).then(orders => {
-                console.log(orders.data);
-                this.setState({orders: orders.data, loading: false});})
+        axios.post(`/api/get/orders`, {filterByBuyer: byBuyer})
+            .then(orders => this.setState({orders: orders.data, loading: false}))
             .catch(error => console.log(error));
     }
 
@@ -35,8 +31,7 @@ class GetOrders extends Component {
     }
 
     handleSelectBuyer(buyer) {
-        const buyerID = buyer.id;
-        this.getOrders(buyerID);
+        this.getOrders(buyer.id);
         this.setState({filterByBuyer: true, selectedUser: buyer.name});
     }
 
@@ -46,10 +41,9 @@ class GetOrders extends Component {
     }
 
     render() {
-        const { orders, loading, lastCount, filterByBuyer, selectedUser } = this.state;
+        const { orders, buyers, loading, lastCount, filterByBuyer, selectedUser } = this.state;
         const buyerOptions = [];
-
-        this.state.buyers.forEach(item => buyerOptions.push({label: item.name, id: item.id}));
+        buyers.forEach(item => buyerOptions.push({label: item.name, id: item.id}));
 
         return(
             <div className="container">
@@ -62,8 +56,11 @@ class GetOrders extends Component {
 
                         {filterByBuyer
                             ? <label>Orders of Buyer <span className={'btn btn-sm btn-danger'}
-                                      onClick={this.handleRemoveFilter.bind(this)}> remove filter X</span></label>
-                            : <label>All Orders</label>}
+                                      onClick={this.handleRemoveFilter.bind(this)}> remove filter X </span></label>
+                            : <label>All Orders</label> }
+                        <span style={{margin: 10, padding: 5}} className={'fa fa-refresh btn btn-xs btn-info'} onClick={this.componentDidMount.bind(this)}>
+                            <small> Refresh</small>
+                        </span>
                         <Select
                             value={selectedUser}
                             options={buyerOptions}
@@ -90,20 +87,17 @@ class GetOrders extends Component {
                                             </tr>
                                     )}
                             </tbody>)
-                                : (<tbody><tr><td>No Orders!</td></tr></tbody>)}
+                                : (<tbody><tr><td><span>No Orders!</span></td></tr></tbody>)}
                         </table>
                         <div className={'text-center'}>
-                            {lastCount < orders.length ?
-                                (
-                                    <button className={'btn btn-sm btn-info'} onClick={this.handleChangeLimit.bind(this, true)}>Show More <span className={'fa fa-arrow-down fa-1x'}></span> </button>
-                                )
+                            {lastCount < orders.length
+                                ? (<button className={'btn btn-sm btn-info'} onClick={this.handleChangeLimit.bind(this, true)}>Show More <span className={'fa fa-arrow-down fa-1x'}></span> </button>)
                                 : null
                             }
                             <span>&nbsp;</span>
-                            {lastCount > 5 ?
-                                (
-                                    <button className={'btn btn-sm btn-danger'} onClick={this.handleChangeLimit.bind(this, false)}>Show Less <span className={'fa fa-arrow-up fa-1x'}></span></button>
-                                ) : null
+                            {lastCount > 5
+                                ? (<button className={'btn btn-sm btn-danger'} onClick={this.handleChangeLimit.bind(this, false)}>Show Less <span className={'fa fa-arrow-up fa-1x'}></span></button>)
+                                : null
                             }
                         </div>
                     </div>

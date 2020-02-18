@@ -14,10 +14,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 class APIController extends AbstractController
 {
@@ -32,11 +28,7 @@ class APIController extends AbstractController
     public function createProduct(Request $request, EntityManagerInterface $em) :Response
     {
         $productName = $request->get('productName');
-        if (!$this->isValidProductName($productName)) {
-            return new Response('Error!');
-        }
-        $product = new Product();
-        $product->setName($productName);
+        $product = new Product($productName);
         $em->persist($product);
         $em->flush();
         return new Response('Saved new product name: ' . $product->getName() . ' with id: ' . $product->getId());
@@ -49,7 +41,7 @@ class APIController extends AbstractController
     public function getProducts() :Response
     {
         $query = $this->getDoctrine()
-        ->getRepository('App:Product')
+        ->getRepository(Product::class)
         ->createQueryBuilder('prod')
         ->addOrderBy('prod.id', 'DESC')
         ->getQuery();
@@ -60,21 +52,6 @@ class APIController extends AbstractController
         return new Response(json_encode($result));
     }
 
-    /**
-     * @Description("simple product name validation {length and existence}")
-     * @param string $name
-     * @return bool
-     */
-    private function isValidProductName(string $name) :bool
-    {
-        if ($name === null || strlen($name) <= 1 || strlen($name) > 10){
-            return false;
-        }
-        $found = $this->getDoctrine()
-            ->getRepository('App:Product')->findBy(['name' => $name]);
-
-        return count($found) === 0;
-    }
     // -------------------------------- END PRODUCTS --------------------------------
 
 
@@ -88,11 +65,7 @@ class APIController extends AbstractController
     public function createBuyer(Request $request, EntityManagerInterface $em) :Response
     {
         $buyerName = $request->get('buyerName');
-        if (!$this->isValidBuyerName($buyerName)) {
-            return new Response('Error!');
-        }
-        $buyer = new Buyer();
-        $buyer->setName($buyerName);
+        $buyer = new Buyer($buyerName);
         $buyer->setAuthToken((new Utils())->generateToken());
         $em->persist($buyer);
         $em->flush();
@@ -106,7 +79,7 @@ class APIController extends AbstractController
     public function getBuyers() :Response
     {
         $query = $this->getDoctrine()
-            ->getRepository('App:Buyer')
+            ->getRepository(Buyer::class)
             ->createQueryBuilder('buyer')
             ->addOrderBy('buyer.id', 'DESC')
             ->getQuery();
@@ -128,7 +101,7 @@ class APIController extends AbstractController
             return false;
         }
         $found = $this->getDoctrine()
-            ->getRepository('App:Buyer')->findBy(['name' => $name]);
+            ->getRepository(Buyer::class)->findBy(['name' => $name]);
 
         return count($found) === 0;
     }
@@ -150,7 +123,7 @@ class APIController extends AbstractController
             return new Response('Error empty inputs');
         }
 
-        $buyer = $this->getDoctrine()->getRepository('App:Buyer')->find($buyerId);
+        $buyer = $this->getDoctrine()->getRepository(Buyer::class)->find($buyerId);
         if(!$buyer){
             return new Response('No buyer found with id ' . $buyerId);
         }
@@ -159,7 +132,7 @@ class APIController extends AbstractController
         $order->setBuyer($buyer);
 
         foreach ($productsIds as $productId) {
-            $product = $this->getDoctrine()->getRepository('App:Product')->find($productId['id']);
+            $product = $this->getDoctrine()->getRepository(Product::class )->find($productId['id']);
             if(!$product){
                 return new Response('No product found with id ' . $productId);
             }
@@ -181,7 +154,7 @@ class APIController extends AbstractController
         $filterByBuyer = $request->get('filterByBuyer') ?? -1; // -1 means disable filter byBuyer
 
         $query = $this->getDoctrine()
-            ->getRepository('App:Orders')
+            ->getRepository(Orders::class)
             ->createQueryBuilder('orders')
             ->addOrderBy('orders.id', 'DESC');
 
@@ -197,7 +170,7 @@ class APIController extends AbstractController
 
         $orders = [];
         foreach ($result as $item) {
-            $order = $this->getDoctrine()->getRepository('App:Orders')->find($item);
+            $order = $this->getDoctrine()->getRepository(Orders::class)->find($item);
             $products = [];
             foreach ($order->getProducts() as $product) {
                 $products[] = [

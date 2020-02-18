@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BuyerRepository")
@@ -20,6 +21,9 @@ class Buyer
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(min=2)
      */
     private $name;
 
@@ -33,10 +37,12 @@ class Buyer
      */
     private $orders;
 
-    public function __construct()
+    public function __construct($name = null)
     {
         $this->orders = new ArrayCollection();
-        $this->products = new ArrayCollection();
+        if ($name !== null){
+            $this->setName($name);
+        }
     }
 
     public function getId(): ?int

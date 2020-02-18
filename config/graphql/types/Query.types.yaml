@@ -1,8 +1,35 @@
 Query:
   type: object
   config:
-    description: "Products ORM repository"
     fields:
+
+      products:
+        type: "[Product]"
+        resolve: '@=resolver("App\\GraphQL\\Resolver\\ProductResolver::allProduct")'
       product:
-        type: "product"
-        resolve: '@=resolver("App\\GraphQL\\Resolvers\\ProductResolver")'
+        type: "Product"
+        args:
+          id:
+            type: Int!
+        resolve: '@=resolver("App\\GraphQL\\Resolver\\ProductResolver::resolve", [args["id"]])'
+
+      buyers:
+        type: "[Buyer]"
+        resolve: '@=resolver("App\\GraphQL\\Resolver\\BuyerResolver::allBuyers")'
+      buyer:
+        type: "Buyer"
+        args:
+          id:
+            type: Int!
+        resolve: '@=resolver("App\\GraphQL\\Resolver\\BuyerResolver::resolve", [args["id"]])'
+
+      orders:
+        type: "[Orders]"
+        resolve: '@=resolver("App\\GraphQL\\Resolver\\OrderResolver::allOrders")'
+      order:
+        type: "Orders"
+        args:
+          id:
+            type: Int!
+        resolve: '@=resolver("App\\GraphQL\\Resolver\\OrderResolver::resolve", [args["id"]])'
+

@@ -33,7 +33,10 @@ class GetBuyers extends Component {
                     </div>
                 ) : (
                     <div className={'row'}>
-                        <label>All Products</label>
+                        <label>All Buyers</label>
+                        <span style={{margin: 10, padding: 5}} className={'fa fa-refresh btn btn-xs btn-info'} onClick={this.componentDidMount.bind(this)}>
+                            <small> Refresh</small>
+                        </span>
                         <table className="table">
                             <thead className="thead-light">
                             <tr>
@@ -43,28 +46,25 @@ class GetBuyers extends Component {
                             </thead>
                             {buyers.length > 0
                                 ? ( <tbody>
-                                { buyers.slice(0, lastCount).map( buyer =>
-                                    <tr key={buyer.id}>
-                                        <th scope="row">{buyer.id}</th>
-                                        <td>{buyer.name}</td>
-                                    </tr>
-                                )}
-                            </tbody>)
-                            : (<tbody><tr><td>No Buyers!</td></tr></tbody>)}
+                                    { buyers.slice(0, lastCount).map( buyer =>
+                                        <tr key={buyer.id}>
+                                            <th scope="row">{buyer.id}</th>
+                                            <td>{buyer.name}</td>
+                                        </tr>
+                                    )}
+                                    </tbody>)
+                                : (<tbody><tr><td><span>No Buyers!</span></td></tr></tbody>)}
 
                         </table>
                         <div className={'text-center'}>
-                            {lastCount < buyers.length ?
-                                (
-                                    <button className={'btn btn-sm btn-info'} onClick={this.handleChangeLimit.bind(this, true)}>Show More <span className={'fa fa-arrow-down fa-1x'}></span> </button>
-                                )
+                            {lastCount < buyers.length
+                                ? (<button className={'btn btn-sm btn-info'} onClick={this.handleChangeLimit.bind(this, true)}>Show More <span className={'fa fa-arrow-down fa-1x'}></span> </button>)
                                 : null
                             }
                             <span>&nbsp;</span>
-                            {lastCount > 5 ?
-                                (
-                                    <button className={'btn btn-sm btn-danger'} onClick={this.handleChangeLimit.bind(this, false)}>Show Less <span className={'fa fa-arrow-up fa-1x'}></span></button>
-                                ) : null
+                            {lastCount > 5
+                                ? (<button className={'btn btn-sm btn-danger'} onClick={this.handleChangeLimit.bind(this, false)}>Show Less <span className={'fa fa-arrow-up fa-1x'}></span></button>)
+                                : null
                             }
                         </div>
                     </div>

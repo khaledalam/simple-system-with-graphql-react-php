@@ -1,7 +1,9 @@
 overblog_graphql:
     definitions:
+        show_debug_info: true
         schema:
             query: Query
+            mutation: Mutation
         mappings:
             types:
                 -

@@ -1,11 +1,9 @@
 Product:
   type: object
   config:
-    description: "An product"
+    resolveField: '@=resolver("App\\GraphQL\\Resolver\\ProductResolver", [info, value, args])'
     fields:
-      productID:
-        type: "Int!"
-        description: "The unique ID of the product."
-      productName:
-        type: "String"
-        description: "Name of the product"
+      id:
+        type: Int
+      name:
+        type: String

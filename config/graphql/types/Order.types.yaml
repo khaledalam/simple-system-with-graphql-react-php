@@ -1,0 +1,13 @@
+Orders:
+  type: object
+  config:
+    resolveField: '@=resolver("App\\GraphQL\\Resolver\\OrderResolver", [info, value, args])'
+    fields:
+      id:
+        type: Int
+      buyer:
+        type: "Buyer"
+      products:
+        type: "[Product]"
+      timestamp:
+        type: String

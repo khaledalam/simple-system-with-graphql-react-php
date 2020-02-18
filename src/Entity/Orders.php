@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrdersRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Orders
 {
@@ -28,9 +29,16 @@ class Orders
      */
     private $products;
 
+    /**
+     * @var datetime $timeStamp
+     * @ORM\Column(type="datetime")
+     */
+    protected $timeStamp;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->createTimestamps();
     }
 
     public function getId(): ?int
@@ -75,4 +83,24 @@ class Orders
 
         return $this;
     }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function createTimestamps(): void
+    {
+        $this->setTimestamp(new \DateTime('now'));
+    }
+
+    public function getTimestamp(): string
+    {
+        return $this->timeStamp->format('Y-m-d H:i:s');
+    }
+
+    public function setTimestamp(\DateTime $timeStamp): void
+    {
+        $this->timeStamp = $timeStamp;
+    }
+
+
 }

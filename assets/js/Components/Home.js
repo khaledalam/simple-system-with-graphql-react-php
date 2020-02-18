@@ -49,10 +49,10 @@ class Home extends Component {
                             <div className="tab-pane fade" id="tabGetProducts">
                                 <GetProducts/>
                             </div>
-                            <div className="tab-pane fade" id="tabGetBuyers">
+                            <div className="tab-pane fade in active" id="tabGetBuyers">
                                 <GetBuyers/>
                             </div>
-                            <div className="tab-pane fade in active" id="tabGetOrders">
+                            <div className="tab-pane fade" id="tabGetOrders">
                                 <GetOrders/>
                             </div>
                         </div>
