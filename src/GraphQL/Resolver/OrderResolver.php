@@ -8,10 +8,8 @@ use App\Entity\Buyer;
 use App\Entity\Orders;
 use Doctrine\ORM\EntityManagerInterface;
 use GraphQL\Type\Definition\ResolveInfo;
-use JMS\Serializer\Tests\Fixtures\Order;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
-use phpDocumentor\Reflection\Types\Object_;
 
 class OrderResolver implements ResolverInterface {
 
