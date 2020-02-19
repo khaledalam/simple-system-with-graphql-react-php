@@ -5,10 +5,9 @@ Tools used:  PHP v7.3^ ,  Symfony 4.4^ ,  React 16^ , SQL , Docker , overblog/Gr
 ##### Preview:
 as [gif](preview.gif) - [video](https://youtu.be/lETcXJiwCh0)
 <img src="preview.gif">
-- UI: [https://s1mplesys.000webhostapp.com/public](https://s1mplesys.000webhostapp.com/public)
-- GraphiQL: [https://s1mplesys.000webhostapp.com/public/graphiql](https://s1mplesys.000webhostapp.com/public/graphiql)
-- GraphQL: [https://s1mplesys.000webhostapp.com/public/graphql/?query=query{buyers{id,name}}](https://s1mplesys.000webhostapp.com/public/graphql/?query=query{buyers{id,name}})
-
+- GraphiQL: [http://146.71.79.164:85/graphiql](http://146.71.79.164:85/graphiql)
+- GraphQL: [http://146.71.79.164:85/graphql/?query=query{buyers{id,name}}](http://146.71.79.164:85/graphql/?query=query{buyers{id,name}})
+- UI: [http://146.71.79.164:85](http://146.71.79.164:85)
 
 note: this is my first time to use GraphQL & Reactjs
 ##### GraphiQL:
@@ -59,6 +58,7 @@ note: this is my first time to use GraphQL & Reactjs
 - ```
   $ composer install   # press (a) to accept all recipes
   $ yarn install
+  $ yarn encore dev
   $ php bin/console doctrine:database:create
   $ php bin/console doctrine:schema:update --force -n
   $ php bin/console doctrine:fixtures:load -n  # add dummy buyers&products
