@@ -14,13 +14,13 @@ class GetOrders extends Component {
     }
 
     getOrders(byBuyer = -1) {
-        axios.post(`/api/get/orders`, {filterByBuyer: byBuyer})
+        axios.post('./api/get/orders', {filterByBuyer: byBuyer})
             .then(orders => this.setState({orders: orders.data, loading: false}))
             .catch(error => console.log(error));
     }
 
     getBuyers() {
-        axios.get(`/api/get/buyers`)
+        axios.get('./api/get/buyers')
             .then(buyers => { this.setState({ buyers: buyers.data, loading: false});})
             .catch(error => console.log(error));
     }

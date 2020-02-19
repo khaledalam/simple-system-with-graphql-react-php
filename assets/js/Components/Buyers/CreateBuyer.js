@@ -11,7 +11,7 @@ class CreateBuyer extends Component {
 
     handleCreateBuyer(e) {
         e.preventDefault();
-        axios.post('/api/create/buyer', {
+        axios.post('./api/create/buyer', {
             buyerName: this.state.buyerName,
         })
         .then(response => toast(response.data))

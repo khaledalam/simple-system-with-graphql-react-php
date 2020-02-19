@@ -12,7 +12,7 @@ class GetProducts extends Component {
     }
 
     getProducts() {
-        axios.get(`/api/get/products`)
+        axios.get('./api/get/products')
             .then(products => { this.setState({ products: products.data, loading: false});})
             .catch(error => console.log(error));
     }

@@ -16,13 +16,13 @@ class CreateOrder extends Component {
     }
 
     getProducts() {
-        axios.get(`/api/get/products`)
+        axios.get('./api/get/products')
             .then(products => { this.setState({ products: products.data, loading: false});})
             .catch(error => console.log(error));
     }
 
     getBuyers() {
-        axios.get(`/api/get/buyers`)
+        axios.get('./api/get/buyers')
             .then(buyers => { this.setState({ buyers: buyers.data, loading: false});})
             .catch(error => console.log(error));
     }

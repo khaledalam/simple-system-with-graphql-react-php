@@ -11,7 +11,7 @@ class CreateProduct extends Component {
 
     handleCreateProduct(e) {
         e.preventDefault();
-        axios.post('/api/create/product', {
+        axios.post('./api/create/product', {
             productName: this.state.productName,
         })
         .then(response => toast(response.data))
