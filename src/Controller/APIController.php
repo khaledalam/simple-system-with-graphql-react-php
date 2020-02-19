@@ -170,7 +170,7 @@ class APIController extends AbstractController
 
         $orders = [];
         foreach ($result as $item) {
-            $order = $this->getDoctrine()->getRepository(Orders::class)->find($item);
+            $order = $this->getDoctrine()->getRepository(Orders::class)->find($item['id']);
             $products = [];
             foreach ($order->getProducts() as $product) {
                 $products[] = [
