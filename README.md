@@ -68,12 +68,11 @@ note: this is my first time to use GraphQL & Reactjs
    ```
 ##### Assumptions:
 - I assume order can contain multi-products instead of a single product.
-- I assume we can use any ready jwt sandbox app (ex. example)
+- I assume we can use any ready jwt sandbox app (ex. [lexik-jwt-authentication-sandbox](https://github.com/chalasr/lexik-jwt-authentication-sandbox))
 host jwt sandbox on any server
-inject it throw register, login and retrieving buyer's orders processes via HTTPexample: - curl -H "Authorization: jwt+[TOKEN]" http://jwt_server/getBuyerIdOfThisToken - compare returnedId with current buyer id - if equal then fetch all current buyer's orders
-- I assume all current urls available only for admins
-- I assume validations are very basic annotation constraints
-- I assume we use symfony environment (ex. this docker-symfony)
+inject it throw register, login and retrieving buyer's orders processes via HTTP <br>example: <br>- curl -H "Authorization: jwt+[TOKEN]" http://jwt_server/getBuyerIdOfThisToken <br> if token valid then fetch the buyer's orders
+- I assume validations are very basic via annotation constraints
+- I assume we use symfony environment (ex. this [docker-symfony](https://github.com/eko/docker-symfony))
 - I assume more improvements will be done (ex. decrease redundant codes, reducing repetition logic)
 - I assume using another toolkit that supports editing HTTP headers for graphql instead of playground(since I used symfony not laravel and no stable symfony bundle similar to mll-lab/laravel-graphql-playground)
 
