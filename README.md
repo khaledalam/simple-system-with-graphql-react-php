@@ -5,9 +5,9 @@ Tools used:  PHP v7.3^ ,  Symfony 4.4^ ,  React 16^ , SQL , Docker , overblog/Gr
 ##### Preview:
 as [gif](preview.gif) - [video](https://youtu.be/lETcXJiwCh0)
 <img src="preview.gif">
-- GraphiQL: [http://146.71.79.164:85/graphiql](http://146.71.79.164:85/graphiql)
-- GraphQL: [http://146.71.79.164:85/graphql/?query=query{buyers{id,name}}](http://146.71.79.164:85/graphql/?query=query{buyers{id,name}})
-- UI: [http://146.71.79.164:85](http://146.71.79.164:85)
+- GraphiQL: ~[http://146.71.79.164:85/graphiql](http://146.71.79.164:85/graphiql)~
+- GraphQL: ~[http://146.71.79.164:85/graphql/?query=query{buyers{id,name}}](http://146.71.79.164:85/graphql/?query=query{buyers{id,name}})~
+- UI: ~[http://146.71.79.164:85](http://146.71.79.164:85)~
 
 note: this is my first time to use GraphQL & Reactjs
 ##### GraphiQL:
